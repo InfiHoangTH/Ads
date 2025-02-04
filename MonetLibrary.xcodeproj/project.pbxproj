@@ -6,13 +6,33 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		03ED222E947825B00C78368B /* Pods_MonetLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB4F9DF70E970973C418B525 /* Pods_MonetLibrary.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		83A08CCDD7A1D33D81C52F54 /* Pods-MonetLibrary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MonetLibrary.release.xcconfig"; path = "Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary.release.xcconfig"; sourceTree = "<group>"; };
+		9F30D99680B90899D4BBECC3 /* Pods-MonetLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MonetLibrary.debug.xcconfig"; path = "Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary.debug.xcconfig"; sourceTree = "<group>"; };
 		C75451222D409B2500912525 /* MonetLibrary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MonetLibrary.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB4F9DF70E970973C418B525 /* Pods_MonetLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MonetLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C754516A2D40A7EF00912525 /* Exceptions for "MonetLibrary" folder in "MonetLibrary" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C75451212D409B2500912525 /* MonetLibrary */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C75451242D409B2500912525 /* MonetLibrary */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C754516A2D40A7EF00912525 /* Exceptions for "MonetLibrary" folder in "MonetLibrary" target */,
+			);
 			path = MonetLibrary;
 			sourceTree = "<group>";
 		};
@@ -23,17 +43,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03ED222E947825B00C78368B /* Pods_MonetLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF349B98263E00FF9ED8A7E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB4F9DF70E970973C418B525 /* Pods_MonetLibrary.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C71BFDF1360B3F4B6BF29B33 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9F30D99680B90899D4BBECC3 /* Pods-MonetLibrary.debug.xcconfig */,
+				83A08CCDD7A1D33D81C52F54 /* Pods-MonetLibrary.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C75451192D409B2500912525 = {
 			isa = PBXGroup;
 			children = (
 				C75451242D409B2500912525 /* MonetLibrary */,
 				C75451232D409B2500912525 /* Products */,
+				C71BFDF1360B3F4B6BF29B33 /* Pods */,
+				BF349B98263E00FF9ED8A7E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,9 +92,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C75451302D409B2600912525 /* Build configuration list for PBXNativeTarget "MonetLibrary" */;
 			buildPhases = (
+				BC40BA11F3B6F263269E51A9 /* [CP] Check Pods Manifest.lock */,
 				C754511E2D409B2500912525 /* Sources */,
 				C754511F2D409B2500912525 /* Frameworks */,
 				C75451202D409B2500912525 /* Resources */,
+				021EB8A45FDE277B51E872BF /* [CP] Copy Pods Resources */,
+				E7DA71BFA6C0DABF8851E579 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -64,8 +107,6 @@
 				C75451242D409B2500912525 /* MonetLibrary */,
 			);
 			name = MonetLibrary;
-			packageProductDependencies = (
-			);
 			productName = MonetLibrary;
 			productReference = C75451222D409B2500912525 /* MonetLibrary.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +154,65 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		021EB8A45FDE277B51E872BF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BC40BA11F3B6F263269E51A9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MonetLibrary-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E7DA71BFA6C0DABF8851E579 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MonetLibrary/Pods-MonetLibrary-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C754511E2D409B2500912525 /* Sources */ = {
@@ -246,6 +346,7 @@
 		};
 		C75451312D409B2600912525 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F30D99680B90899D4BBECC3 /* Pods-MonetLibrary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -253,7 +354,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MonetLibrary/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MonetLibrary/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -274,6 +377,7 @@
 		};
 		C75451322D409B2600912525 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83A08CCDD7A1D33D81C52F54 /* Pods-MonetLibrary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -281,7 +385,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MonetLibrary/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MonetLibrary/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
