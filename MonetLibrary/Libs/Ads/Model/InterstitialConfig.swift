@@ -8,5 +8,5 @@
 import Foundation
 struct InterstitialConfig {
     let adUnits: [String]
-    let loadType: LoadType = .fastest
+    var loadType: LoadType = .fastest
 }

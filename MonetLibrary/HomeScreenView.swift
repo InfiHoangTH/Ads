@@ -11,9 +11,13 @@ struct HomeScreenView: View {
     @StateObject private var adManager = InterstitialAdManager()
     var body: some View {
         ZStack {
-            Button(action: {
-                showInterstitialAd()
-            }, label: {Text("test")})
+            VStack {
+                Button(action: {
+    //                showInterstitialAd()
+                    AdsManager.shared.show(placementConfig: AdsPlacement.reward.getConfig(), action: {})
+                }, label: {Text("test")})
+                BannerAdView(config: AdsManager.shared.getBannerConfig(placementConfig: AdsPlacement.banner.getConfig())!)
+            }
         }.onAppear(perform: {
             
         }).background {

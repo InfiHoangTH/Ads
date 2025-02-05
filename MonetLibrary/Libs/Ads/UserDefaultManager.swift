@@ -13,7 +13,7 @@ public class UserDefaultManager: ObservableObject {
     private let userDefault: UserDefaults!
     
     init() {
-        userDefault = UserDefaults(suiteName: bundleId)
+        userDefault = UserDefaults()
     }
     
     public enum UserDefaultKeys: String {

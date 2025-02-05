@@ -11,7 +11,7 @@ import GoogleMobileAds
 class InterstitialLoader: ObservableObject{
     @Published var isLoading: Bool =  false
     
-    private func load(config: InterstitialConfig) async -> GADInterstitialAd? {
+    func load(config: InterstitialConfig) async -> GADInterstitialAd? {
         isLoading = true
         let ids = config.adUnits
         if ids.isEmpty {
@@ -36,7 +36,7 @@ class InterstitialLoader: ObservableObject{
             case .priorityAsync:
                 let ad = try? await loadAdsPriorityAsync(adUnitIDs: ids)
                 isLoading = false
-                return try? await loadAdsPriorityAsync(adUnitIDs: ids)
+                return ad
             }
         }
     }
@@ -45,7 +45,7 @@ class InterstitialLoader: ObservableObject{
         let request = GADRequest()
         return try await withCheckedThrowingContinuation { continuation in
             GADInterstitialAd.load(withAdUnitID: id, request: request) {[weak self] ad, error in
-                guard let self else {
+                guard self != nil else {
                     return
                 }
                 if let error = error {
@@ -70,9 +70,12 @@ class InterstitialLoader: ObservableObject{
                 }
             }
             for try await ad in group {
-                fastesAd = ad
-                group.cancelAll()
-                break
+                if ad != nil {
+                    fastesAd = ad
+                    group.cancelAll()
+                    break
+                }
+                
             }
             if let fastesAd = fastesAd {
                 return fastesAd
@@ -130,11 +133,10 @@ class InterstitialLoader: ObservableObject{
         return try await withThrowingTaskGroup(of: (String, GADInterstitialAd?).self) { group in
             var results: [(String, GADInterstitialAd?)] = []
 
-            // Chạy song song 4 quảng cáo đầu tiên
             for i in 0..<(adUnitIDs.count - 1) {
                 group.addTask {
-                    let ad = try? await self.loadAds(id: adUnitIDs[i]) // Load từng quảng cáo
-                    return (adUnitIDs[i], ad) // Trả về tuple chứa ID quảng cáo và kết quả
+                    let ad = try? await self.loadAds(id: adUnitIDs[i])
+                    return (adUnitIDs[i], ad)
                 }
             }
 

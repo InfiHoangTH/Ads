@@ -6,27 +6,44 @@
 //
 
 import Foundation
-
-class AdsManager {
+@MainActor
+class AdsManager: ObservableObject {
     static let shared = AdsManager()
+    private let interstitialLoader = InterstitialLoader()
+    private let rewardLoader = RewardLoader()
+     
     
     func show(placementConfig: AdsPlacementConfig, action: () -> Void) {
-    
         if defaultConfig.isPurchased {
             action()
             return
         }
         switch placementConfig.type {
-        case .banner(let bannerConfig):
-            break
-        case .native(let nativeConfig):
-            break
         case .interstitial(let interstitialConfig):
+            Task {
+                let ad = await interstitialLoader.load(config: interstitialConfig)
+                ad?.present(fromRootViewController: getRootViewController()!)
+                
+            }
             break
         case .reward(let rewardConfig):
+            Task {
+                let ad = await rewardLoader.loadAd(config: rewardConfig)
+                ad?.present(fromRootViewController: getRootViewController(), userDidEarnRewardHandler: {
+                    
+                })
+            }
             break
+        default: break
         }
     }
     
+    func getBannerConfig(placementConfig: AdsPlacementConfig) -> BannerConfig? {
+        switch placementConfig.type {
+        case .banner(let config):
+            return config
+        default: return nil
+        }
+    }
     
 }

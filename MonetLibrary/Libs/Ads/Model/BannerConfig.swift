@@ -6,6 +6,7 @@
 //
 
 struct BannerConfig {
-    let id: String
+    let ids: [String]
     let isCollapsed = false
+    var loadType: LoadType = .fastest
 }
