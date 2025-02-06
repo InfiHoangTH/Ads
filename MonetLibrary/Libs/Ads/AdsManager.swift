@@ -11,7 +11,8 @@ class AdsManager: ObservableObject {
     static let shared = AdsManager()
     private let interstitialLoader = InterstitialLoader()
     private let rewardLoader = RewardLoader()
-     
+    private let nativeLoader = NativeLoader()
+    
     
     func show(placementConfig: AdsPlacementConfig, action: () -> Void) {
         if defaultConfig.isPurchased {
@@ -44,6 +45,10 @@ class AdsManager: ObservableObject {
             return config
         default: return nil
         }
+    }
+    
+    func getNativeAd(config: AdsPlacementConfig) async throws -> NativeAdView {
+        return nativeLoader.loadNativeAd(id: config.)
     }
     
 }

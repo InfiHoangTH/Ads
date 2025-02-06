@@ -7,5 +7,6 @@
 
 import Foundation
 struct NativeConfig {
-    let id: String
+    let adUnitIds: [String]
+    let loadType: LoadType = .fastest
 }

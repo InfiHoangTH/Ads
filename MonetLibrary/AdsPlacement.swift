@@ -12,6 +12,7 @@ enum AdsPlacement {
     case home
     case reward
     case banner
+    case native
     func getConfig() -> AdsPlacementConfig {
         switch self {
         case .home:
@@ -21,6 +22,9 @@ enum AdsPlacement {
             
         case .banner:
             return AdsPlacementConfig(type: .banner(BannerConfig(ids: ["ca-app-pub-3940256099942544/2934735716", "ca-app-pub-3940256099942544/2934735716", "ca-app-pub-3940256099942544/2934735716"], loadType: .priorityAsync)), activeConfigKey: "--")
+            
+        case .native:
+            return AdsPlacementConfig(type: .native(NativeConfig(adUnitIds: ["ca-app-pub-3940256099942544/3986624511"])), activeConfigKey: "")
     
 
         default:
