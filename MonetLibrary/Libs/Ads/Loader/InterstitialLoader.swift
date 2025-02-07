@@ -7,11 +7,12 @@
 
 import Foundation
 import GoogleMobileAds
-@MainActor
+
 class InterstitialLoader: ObservableObject{
     @Published var isLoading: Bool =  false
+    private var cachedAds: [String: GADInterstitialAd?] = [:]
     
-    func load(config: InterstitialConfig) async -> GADInterstitialAd? {
+    func loadInterstitial(config: InterstitialConfig) async -> GADInterstitialAd? {
         isLoading = true
         let ids = config.adUnits
         if ids.isEmpty {
@@ -164,17 +165,27 @@ class InterstitialLoader: ObservableObject{
     private func loadAd(adUnitID: String) async throws -> GADInterstitialAd {
         return try await withCheckedThrowingContinuation { continuation in
             let request = GADRequest()
-            GADInterstitialAd.load(withAdUnitID: adUnitID, request: request) { ad, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                } else if let ad = ad {
-                    continuation.resume(returning: ad)
-                } else {
-                    continuation.resume(throwing: NSError(domain: "AdError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load ad with unknown error"]))
+            if cachedAds[adUnitID] != nil {
+                continuation.resume(returning: cachedAds[adUnitID]!!)
+            } else {
+                GADInterstitialAd.load(withAdUnitID: adUnitID, request: request) { ad, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let ad = ad {
+                        self.cachedAds[adUnitID] = ad
+                        continuation.resume(returning: ad)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "AdError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load ad with unknown error"]))
+                    }
                 }
             }
         }
     }
+    func removeCache(adUnitId: String) {
+        cachedAds[adUnitId] = nil
+    }
+    
+    
     
 }
 

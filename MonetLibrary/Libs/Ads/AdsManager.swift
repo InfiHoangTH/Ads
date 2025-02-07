@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import GoogleMobileAds
 @MainActor
 class AdsManager: ObservableObject {
     static let shared = AdsManager()
-    private let interstitialLoader = InterstitialLoader()
+    let interstitialManager = InterstitialManager()
     private let rewardLoader = RewardLoader()
-    private let nativeLoader = NativeLoader()
+    
+    init() {
+        
+    }
     
     
-    func show(placementConfig: AdsPlacementConfig, action: () -> Void) {
+    func show(placementConfig: AdsPlacementConfig, action: @escaping() -> Void) {
         if defaultConfig.isPurchased {
             action()
             return
@@ -22,8 +26,15 @@ class AdsManager: ObservableObject {
         switch placementConfig.type {
         case .interstitial(let interstitialConfig):
             Task {
-                let ad = await interstitialLoader.load(config: interstitialConfig)
-                ad?.present(fromRootViewController: getRootViewController()!)
+                let ad = await interstitialManager.loadAd(config: interstitialConfig, remoteConfigKey: placementConfig.activeConfigKey)
+                if ad == nil {
+                    action()
+                } else {
+                    interstitialManager.showAds(interstitialAd: ad!) {
+                        print("😍 dismiss")
+                        action()
+                    }
+                }
                 
             }
             break
@@ -47,8 +58,11 @@ class AdsManager: ObservableObject {
         }
     }
     
-    func getNativeAd(config: AdsPlacementConfig) async throws -> NativeAdView {
-        return nativeLoader.loadNativeAd(id: config.)
-    }
     
+    
+}
+
+
+extension AdsManager  {
+
 }

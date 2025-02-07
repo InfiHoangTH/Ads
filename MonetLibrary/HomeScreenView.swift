@@ -13,10 +13,19 @@ struct HomeScreenView: View {
         ZStack {
             VStack {
                 Button(action: {
-    //                showInterstitialAd()
-                    AdsManager.shared.show(placementConfig: AdsPlacement.reward.getConfig(), action: {})
+                    AdsManager.shared.show(placementConfig:  AdsPlacement.home.getConfig()) {
+                        print("😍 Show inter ne")
+                    }
+//                    showInterstitialAd()
+//                    AdsManager.shared.show(placementConfig: AdsPlacement.reward.getConfig(), action: {})
                 }, label: {Text("test")})
                 BannerAdView(config: AdsManager.shared.getBannerConfig(placementConfig: AdsPlacement.banner.getConfig())!)
+                NativeAdView(placement: AdsPlacement.native.getConfig())
+                if AdsManager.shared.interstitialManager.isLoading {
+                    Text("Loading")
+                } else {
+                    Text("Loaded")
+                }
             }
         }.onAppear(perform: {
             

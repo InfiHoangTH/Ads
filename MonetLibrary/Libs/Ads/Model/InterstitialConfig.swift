@@ -7,6 +7,7 @@
 
 import Foundation
 struct InterstitialConfig {
+    let id: String = UUID().uuidString
     let adUnits: [String]
     var loadType: LoadType = .fastest
 }
