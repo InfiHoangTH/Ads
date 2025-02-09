@@ -9,23 +9,28 @@ import SwiftUI
 
 struct HomeScreenView: View {
     @StateObject private var adManager = InterstitialAdManager()
+    @ObservedObject
+    var ads = AdsManager.shared
+
     var body: some View {
         ZStack {
             VStack {
                 Button(action: {
                     AdsManager.shared.show(placementConfig:  AdsPlacement.home.getConfig()) {
-                        print("😍 Show inter ne")
+                        print("😍 Dismiss interstitial")
                     }
-//                    showInterstitialAd()
-//                    AdsManager.shared.show(placementConfig: AdsPlacement.reward.getConfig(), action: {})
-                }, label: {Text("test")})
+
+                }, label: {Text("Show Interstitial")})
+                Button {
+                    AdsManager.shared.show(placementConfig: AdsPlacement.reward.getConfig()) {
+                        print("😍 Earn reward")
+                    }
+                } label: {
+                    Text("Show Reward Ad")
+                }
+
                 BannerAdView(config: AdsManager.shared.getBannerConfig(placementConfig: AdsPlacement.banner.getConfig())!)
                 NativeAdView(placement: AdsPlacement.native.getConfig())
-                if AdsManager.shared.interstitialManager.isLoading {
-                    Text("Loading")
-                } else {
-                    Text("Loaded")
-                }
             }
         }.onAppear(perform: {
             

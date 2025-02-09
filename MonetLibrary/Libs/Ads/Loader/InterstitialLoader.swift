@@ -9,6 +9,8 @@ import Foundation
 import GoogleMobileAds
 
 class InterstitialLoader: ObservableObject{
+    static let shared = InterstitialLoader()
+    private init() {}
     @Published var isLoading: Bool =  false
     private var cachedAds: [String: GADInterstitialAd?] = [:]
     
@@ -43,21 +45,22 @@ class InterstitialLoader: ObservableObject{
     }
     
     private func loadAds(id: String) async throws -> GADInterstitialAd {
-        let request = GADRequest()
         return try await withCheckedThrowingContinuation { continuation in
-            GADInterstitialAd.load(withAdUnitID: id, request: request) {[weak self] ad, error in
-                guard self != nil else {
-                    return
-                }
-                if let error = error {
-                    continuation.resume(throwing: error)
-                } else if let ad = ad {
-                    continuation.resume(returning: ad)
-                } else {
-                    continuation.resume(throwing: NSError(domain: "AdError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load ad with unknown error"]))
+            let request = GADRequest()
+            if cachedAds[id] != nil {
+                continuation.resume(returning: cachedAds[id]!!)
+            } else {
+                GADInterstitialAd.load(withAdUnitID: id, request: request) { ad, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let ad = ad {
+                        self.cachedAds[id] = ad
+                        continuation.resume(returning: ad)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "AdError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load ad with unknown error"]))
+                    }
                 }
             }
-            
         }
     }
 
@@ -161,26 +164,7 @@ class InterstitialLoader: ObservableObject{
         }
     }
 
-    /// Tải quảng cáo với một ID cụ thể (hàm async)
-    private func loadAd(adUnitID: String) async throws -> GADInterstitialAd {
-        return try await withCheckedThrowingContinuation { continuation in
-            let request = GADRequest()
-            if cachedAds[adUnitID] != nil {
-                continuation.resume(returning: cachedAds[adUnitID]!!)
-            } else {
-                GADInterstitialAd.load(withAdUnitID: adUnitID, request: request) { ad, error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else if let ad = ad {
-                        self.cachedAds[adUnitID] = ad
-                        continuation.resume(returning: ad)
-                    } else {
-                        continuation.resume(throwing: NSError(domain: "AdError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load ad with unknown error"]))
-                    }
-                }
-            }
-        }
-    }
+   
     func removeCache(adUnitId: String) {
         cachedAds[adUnitId] = nil
     }

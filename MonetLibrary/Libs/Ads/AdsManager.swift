@@ -10,13 +10,16 @@ import GoogleMobileAds
 @MainActor
 class AdsManager: ObservableObject {
     static let shared = AdsManager()
-    let interstitialManager = InterstitialManager()
-    private let rewardLoader = RewardLoader()
+    private init() {}
+    @Published var isLoadingAd = false
+    private let interstitialManager = InterstitialManager()
+    private let rewardManager = RewardManager()
+    internal var cachedNativeAds:[String: GADNativeAd] = [:]
     
-    init() {
-        
+    
+    func removeCachedNative(adUnitId: String) {
+        cachedNativeAds[adUnitId] = nil
     }
-    
     
     func show(placementConfig: AdsPlacementConfig, action: @escaping() -> Void) {
         if defaultConfig.isPurchased {
@@ -26,13 +29,20 @@ class AdsManager: ObservableObject {
         switch placementConfig.type {
         case .interstitial(let interstitialConfig):
             Task {
+                isLoadingAd = true
                 let ad = await interstitialManager.loadAd(config: interstitialConfig, remoteConfigKey: placementConfig.activeConfigKey)
+                isLoadingAd = false
                 if ad == nil {
                     action()
                 } else {
-                    interstitialManager.showAds(interstitialAd: ad!) {
-                        print("😍 dismiss")
+                    interstitialManager.showAds(interstitialAd: ad!) {[weak self] in
                         action()
+                        guard let self else {return}
+                        if placementConfig.needPreload {
+                            Task {
+                                await self.interstitialManager.loadAd(config: interstitialConfig, remoteConfigKey: placementConfig.activeConfigKey)
+                            }
+                        }
                     }
                 }
                 
@@ -40,10 +50,23 @@ class AdsManager: ObservableObject {
             break
         case .reward(let rewardConfig):
             Task {
-                let ad = await rewardLoader.loadAd(config: rewardConfig)
-                ad?.present(fromRootViewController: getRootViewController(), userDidEarnRewardHandler: {
-                    
-                })
+                isLoadingAd = true
+                let ad = await rewardManager.loadAd(config: rewardConfig, remoteConfigKey: placementConfig.activeConfigKey)
+                isLoadingAd = false
+                guard  let ad = ad else {
+                    return
+                }
+                rewardManager.showAd(ad: ad) {
+                    action()
+                } onAdDismiss: {[weak self] in
+                    guard let self else {return}
+                    if placementConfig.needPreload {
+                        Task {
+                            await self.rewardManager.loadAd(config: rewardConfig , remoteConfigKey: placementConfig.activeConfigKey)
+                        }
+                    }
+                }
+                
             }
             break
         default: break
@@ -60,9 +83,4 @@ class AdsManager: ObservableObject {
     
     
     
-}
-
-
-extension AdsManager  {
-
 }

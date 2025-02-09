@@ -16,7 +16,7 @@ enum AdsPlacement {
     func getConfig() -> AdsPlacementConfig {
         switch self {
         case .home:
-            return AdsPlacementConfig(type: .interstitial(InterstitialConfig(adUnits:["", AdUnit.interstitialHome.rawValue, AdUnit.interstitialHome.rawValue],loadType: .prioritySync)), activeConfigKey: "enable_home")
+            return AdsPlacementConfig(type: .interstitial(InterstitialConfig(adUnits:[AdUnit.interstitialHome.rawValue],loadType: .prioritySync)), activeConfigKey: "enable_home")
         case .reward:
             return AdsPlacementConfig(type: .reward(RewardConfig(id: "ca-app-pub-3940256099942544/1712485313")), activeConfigKey: "enable_reward")
             

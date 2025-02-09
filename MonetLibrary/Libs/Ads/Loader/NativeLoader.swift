@@ -12,14 +12,20 @@ class NativeLoader: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
     private var adContinuation: CheckedContinuation<GADNativeAd, Error>?
     private var loader:GADAdLoader?
     func loadNativeAd(id: String)  async throws -> GADNativeAd {
-        return try await withCheckedThrowingContinuation {[weak self] continuation in
-            guard let self else {return}
-            self.adContinuation = continuation
-            let adLoader = GADAdLoader(adUnitID: id, rootViewController: nil, adTypes: [.native], options: nil)
-            loader = adLoader
-            adLoader.delegate = self
-            adLoader.load(GADRequest())
+        
+        if let ad = await AdsManager.shared.cachedNativeAds[id] {
+            return ad
+        } else {
+            return try await withCheckedThrowingContinuation {[weak self] continuation in
+                guard let self else {return}
+                self.adContinuation = continuation
+                let adLoader = GADAdLoader(adUnitID: id, rootViewController: nil, adTypes: [.native], options: nil)
+                loader = adLoader
+                adLoader.delegate = self
+                adLoader.load(GADRequest())
+            }
         }
+        
     }
     
     
@@ -31,17 +37,14 @@ class NativeLoader: NSObject, ObservableObject, GADNativeAdLoaderDelegate {
         adContinuation?.resume(throwing: error)
     }
     func adLoaderDidFinishLoading(_ adLoader: GADAdLoader) {
-        print("")
     }
 }
 
 @MainActor
 class HFNativeLoader: ObservableObject {
-    @Published var isLoading = false
     private let loader: NativeLoader = NativeLoader()
     
     func load(config: NativeConfig) async -> GADNativeAd? {
-        isLoading = true
         let ids = config.adUnitIds
         if ids.isEmpty {
             fatalError("Ad unit id not config")
@@ -53,19 +56,15 @@ class HFNativeLoader: ObservableObject {
             switch config.loadType {
             case .fastest:
                 let ad = try? await loadAdFastest(adUnitIds: ids)
-                isLoading = false
                 return ad
             case .hfFastest:
                 let ad = try? await loadAdsHfFastest(ids: ids)
-                isLoading = false
                 return ad
             case .prioritySync:
                 let ad = try? await loadAdsPrioritySync(adUnitIDs: ids)
-                isLoading = false
                 return ad
             case .priorityAsync:
                 let ad  = try? await loadAdsPriorityAsync(adUnitIDs: ids)
-                isLoading = false
                 return ad
             }
         }

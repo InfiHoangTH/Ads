@@ -15,7 +15,9 @@ struct MonetLibraryApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            HomeScreenView()
+            AdContentView {
+                HomeScreenView()
+            }
         }
     }
 }

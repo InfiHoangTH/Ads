@@ -9,8 +9,7 @@ import Foundation
 import GoogleMobileAds
 
 class InterstitialManager:NSObject, ObservableObject {
-    @Published var isLoading = false
-    private let loader = InterstitialLoader()
+    private let loader = InterstitialLoader.shared
     var currentAdShowing: GADInterstitialAd? = nil
     private var onAdDismiss: (()->Void)? = nil
     
@@ -19,9 +18,7 @@ class InterstitialManager:NSObject, ObservableObject {
 //        if !AdRemoteConfig.shared.bool(key: remoteConfigKey) {
 //            return nil
 //        }
-        isLoading = true
         let ad  = await loader.loadInterstitial(config: config)
-//        isLoading = false
         return ad
     }
     
@@ -48,6 +45,5 @@ class InterstitialManager:NSObject, ObservableObject {
 extension InterstitialManager: GADFullScreenContentDelegate {
     func adDidDismissFullScreenContent(_ ad: any GADFullScreenPresentingAd) {
         onAdDismiss?()
-        
     }
 }
