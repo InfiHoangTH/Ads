@@ -30,6 +30,8 @@ struct HomeScreenView: View {
                 }
 
                 BannerAdView(config: AdsManager.shared.getBannerConfig(placementConfig: AdsPlacement.banner.getConfig())!)
+                BannerAdView(config: AdsManager.shared.getBannerConfig(placementConfig: AdsPlacement.banner.getConfig())!)
+
                 NativeAdView(placement: AdsPlacement.native.getConfig())
             }
         }.onAppear(perform: {

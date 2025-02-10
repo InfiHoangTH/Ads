@@ -223,6 +223,7 @@ struct BannerAdView: UIViewRepresentable {
         }
         
         private func displayBanner(_ bannerView: GADBannerView) {
+            print("😍 display \(bannerView)")
             guard let container = containerView else { return }
             hasDisplayedBanner = true
             
