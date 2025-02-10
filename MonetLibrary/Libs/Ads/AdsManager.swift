@@ -7,7 +7,6 @@
 
 import Foundation
 import GoogleMobileAds
-@MainActor
 class AdsManager: ObservableObject {
     static let shared = AdsManager()
     private init() {}
@@ -15,6 +14,7 @@ class AdsManager: ObservableObject {
     private let interstitialManager = InterstitialManager()
     private let rewardManager = RewardManager()
     internal var cachedNativeAds:[String: GADNativeAd] = [:]
+    internal var cachedBannerAds: [String: GADBannerView] = [:]
     
     
     func removeCachedNative(adUnitId: String) {
